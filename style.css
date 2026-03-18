@@ -1,0 +1,2022 @@
+/* ==================== FONT IMPORT ==================== */
+@font-face {
+  font-family: 'Penumbra Sans Std';
+  src: url('./fonts/penumbra-sans-std-bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Apply globally to every text element */
+html, body, button, input, textarea, select, p, div, span, h1, h2, h3, h4, h5, h6, a, strong, em, small, label {
+  font-family: 'Penumbra Sans Std', 'Segoe UI', Roboto, sans-serif !important;
+  letter-spacing: 0.25px;
+}
+
+/* ==================== GLOBAL ==================== */
+html {
+  height: 100%;
+  scroll-behavior: smooth;         /* smooth anchor scrolling */
+}
+
+/* === THEME ROOTS === */
+:root {
+  --bg: #0b0b0d;
+  --text: #eaeaea;
+  --muted: #a1a1aa;
+  --card: #121216;
+  --border: #2a2a2f;
+}
+
+.theme-light {
+  --bg: #ffffff;
+  --text: #0b0b0d;
+  --muted: #4b5563;
+  --card: #f6f7f9;
+  --border: #e5e7eb;
+}
+
+/* Page background (dark vs white.png) */
+body {
+  background: var(--bg);
+  color: var(--text);
+  transition: background-color .25s ease, color .25s ease;
+}
+
+.theme-light body,
+body.theme-light {
+  background: #fff url("./images/white.png") center/cover fixed no-repeat;
+}
+
+/* Example elements you likely use */
+.navbar, .panel, .card, .modal-content {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+/* Leaflet tooltips stay readable on both themes */
+.leaflet-tooltip.video-label {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+/* Icon button look (optional) */
+.nav-btn {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px 10px;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+.nav-btn:hover { background: rgba(127,127,127,.12); }
+
+/* If you have a legend panel */
+#mapLegend {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+
+/* Allow vertical scrolling, but visually hide scrollbars cross-browser */
+body {
+  min-height: 100%;
+  margin: 0;
+  color: #fff;
+  overflow-x: hidden;
+  overflow-y: auto;                /* scrolling allowed */
+  background: #000;
+
+  /* Hide scrollbars (IE/Edge legacy & Firefox) */
+  -ms-overflow-style: none;        /* IE 10+ */
+  scrollbar-width: none;           /* Firefox */
+}
+/* Hide scrollbars (Chromium/WebKit: Chrome, Edge, Safari, Vivaldi, Opera) */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/* Fixed site background image (behind everything) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: url('./images/black_background.png') center / cover no-repeat;
+  opacity: 1;
+}
+
+
+
+/* Optional subtle vignette over the background image */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(120% 120% at 50% 0%, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.85) 50%, rgba(0,0,0,0.95) 100%);
+  pointer-events: none;
+}
+
+/* ==================== NAVBAR ==================== */
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 68px;
+  z-index: 12000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 600ms ease, transform 600ms ease, filter 300ms ease;
+}
+.nav-inner {
+  width: 100vw;
+  max-width: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  padding: 12px 20px;
+  border: 1px solid rgba(255,214,10,0.25);
+  border-radius: 0;
+  background: rgba(10,10,10,0.55);
+  backdrop-filter: blur(8px) saturate(1.1);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.45), 0 0 24px rgba(255,214,10,0.08) inset;
+  border-left: none;
+  border-right: none;
+}
+.nav-left { display: flex; align-items: center; gap: 14px; }
+.brand-img {
+  width: 44px; height: 44px; object-fit: contain; display: block;
+  filter: drop-shadow(0 0 10px rgba(255,214,10,0.15));
+}
+.nav-links { list-style: none; display: flex; gap: clamp(10px, 2.8vw, 22px); margin: 0; padding: 0; }
+.nav-links a {
+  color: #eee; text-decoration: none; font-weight: 600; font-size: 15px;
+  padding: 8px 10px; border-radius: 8px; border: 1px solid transparent;
+  transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+.nav-links a:hover { color: #ffd60a; border-color: rgba(255,214,10,0.35); background: rgba(255,214,10,0.06); }
+
+/* Navbar states */
+body.gate-active .navbar {
+  filter: blur(2px) brightness(0.8);
+  opacity: 0.85;
+  pointer-events: none;
+}
+body.intro-active .navbar {
+  opacity: 0;
+  transform: translateY(-12px);
+  pointer-events: none;
+}
+
+/* ==================== MAP FRAME ==================== */
+.map-frame {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  padding-top: 68px; /* clear fixed navbar */
+  box-sizing: border-box;
+  background: rgba(0,0,0,0.85);
+  box-shadow:
+    0 0 0 1px rgba(255,214,10,0.20) inset,
+    0 8px 30px rgba(0,0,0,0.65),
+    0 0 24px rgba(255,214,10,0.08);
+  transition: opacity 600ms ease, filter 600ms ease;
+}
+body.intro-active .map-frame {
+  opacity: 0;
+  filter: blur(2px) brightness(0.8);
+  pointer-events: none;
+}
+
+#map {
+  height: calc(100vh - 68px); /* full viewport minus navbar */
+  width: 100%;
+}
+
+/* Futuristic left→right scan glow */
+.map-frame::before {
+  content: "";
+  position: absolute;
+  inset: -2% 0;
+  pointer-events: none;
+  z-index: 580;
+  border-radius: 14px;
+  background: linear-gradient(
+    to right,
+    rgba(255,214,10,0.00) 0%,
+    rgba(255,214,10,0.00) 42%,
+    rgba(255,214,10,0.35) 48%,
+    rgba(255,214,10,0.7) 50%,
+    rgba(255,214,10,0.35) 52%,
+    rgba(255,214,10,0.00) 58%,
+    rgba(255,214,10,0.00) 100%
+  );
+  mix-blend-mode: screen;
+  opacity: 0.85;
+  filter: blur(0.2px);
+  transform: translateX(-120%);
+  animation: sweep-lr 4.5s cubic-bezier(.2,.6,.2,1) infinite;
+}
+@keyframes sweep-lr { to { transform: translateX(120%); } }
+/* === MAP LEGEND (bottom-left corner) === */
+.map-legend {
+  position: absolute;
+  bottom: 18px;
+  left: 22px;                        /* moved from right → left */
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 214, 10, 0.25);
+  border-radius: 10px;
+  padding: 10px 16px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: opacity 0.4s ease;
+  opacity: 0.6;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-icon {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 4px rgba(255, 214, 10, 0.3));
+}
+
+.map-legend:hover {
+  opacity: 1;
+}
+
+/* ==================== TOOLTIP ==================== */
+.leaflet-tooltip.video-label {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid #ffd60a;
+  color: #ffd60a;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ==================== MODAL ==================== */
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999;
+}
+.modal.hidden { display: none; }
+
+.modal-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(6px);
+}
+
+.modal-content {
+  position: relative; z-index: 10000;
+  background: #1a1a1a;
+  border: 2px solid #ffd60a;
+  border-radius: 16px;
+  padding: 20px;
+  width: 80%;
+  max-width: 800px;
+  box-shadow: 0 0 40px rgba(255, 214, 10, 0.3);
+}
+
+.modal-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 10px;
+}
+.modal-header h2 { margin: 0; color: #ffd60a; font-size: 20px; }
+.modal-header button {
+  background: none; border: none; font-size: 26px; color: #ffd60a; cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.modal-header button:hover { transform: scale(1.2); }
+
+.modal-body { display: flex; justify-content: center; align-items: center; }
+.modal-body video {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #ffd60a;
+  outline: none;
+  box-shadow: 0 0 20px rgba(255, 214, 10, 0.25);
+}
+
+.modal-credit { text-align: center; margin-top: 10px; font-size: 14px; }
+.modal-credit a { color: #ffd60a; text-decoration: none; font-weight: 500; }
+.modal-credit a:hover { text-decoration: underline; }
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+  .modal-content { width: 90%; padding: 15px; }
+  .modal-header h2 { font-size: 18px; }
+  .modal-body video { width: 100%; }
+}
+
+/* ==================== CURSORS ==================== */
+/* Idle (open hand) */
+html body .leaflet-container.leaflet-container,
+.map-frame .leaflet-container.leaflet-container,
+.leaflet-container.leaflet-container .leaflet-interactive {
+  cursor:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 485 485'><path fill='%23ffd60a' d='M382.5,69.429c-7.441,0-14.5,1.646-20.852,4.573c-4.309-23.218-24.7-40.859-49.148-40.859c-7.68,0-14.958,1.744-21.467,4.852C285.641,16.205,265.932,0,242.5,0c-23.432,0-43.141,16.206-48.533,37.995c-6.508-3.107-13.787-4.852-21.467-4.852c-27.57,0-50,22.43-50,50v122.222c-6.129-2.686-12.891-4.187-20-4.187c-27.57,0-50,22.43-50,50V354c0,72.233,58.766,131,131,131h118c72.233,0,131-58.767,131-131V119.429C432.5,91.858,410.07,69.429,382.5,69.429z M402.5,354c0,55.691-45.309,101-101,101h-118c-55.691,0-101-45.309-101-101V251.178c0-11.028,8.972-20,20-20s20,8.972,20,20v80h30V83.143c0-11.028,8.972-20,20-20s20,8.972,20,20v158.035h30V50c0-11.028,8.972-20,20-20c11.028,0,20,8.972,20,20v191.178h30V83.143c0-11.028,8.972-20,20-20s20,8.972,20,20v158.035h30v-121.75c0-11.028,8.972-20,20-20s20,8.972,20,20V354z'/></svg>") 12 12,
+    grab !important;
+}
+/* Dragging (closed hand) */
+html body .leaflet-dragging .leaflet-container.leaflet-container,
+.leaflet-dragging .leaflet-container.leaflet-container,
+.leaflet-dragging .leaflet-container.leaflet-container .leaflet-interactive,
+.leaflet-drag-target {
+  cursor:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 36 36'><path fill='%23ffd60a' d='M28.09,9.74a4,4,0,0,0-1.16.19c-.19-1.24-1.55-2.18-3.27-2.18A4,4,0,0,0,22.13,8,3.37,3.37,0,0,0,19,6.3a3.45,3.45,0,0,0-2.87,1.32,3.65,3.65,0,0,0-1.89-.51A3.05,3.05,0,0,0,11,9.89v.91c-1.06.4-4.11,1.8-4.91,4.84s.34,8,2.69,11.78a25.21,25.21,0,0,0,5.9,6.41.9.9,0,0,0,.53.17H25.55a.92.92,0,0,0,.55-.19,13.13,13.13,0,0,0,3.75-6.13A25.8,25.8,0,0,0,31.41,18v-5.5A3.08,3.08,0,0,0,28.09,9.74ZM29.61,18a24,24,0,0,1-1.47,9.15A12.46,12.46,0,0,1,25.2,32.2H15.47a23.75,23.75,0,0,1-5.2-5.72c-2.37-3.86-3-8.23-2.48-10.39A5.7,5.7,0,0,1,11,12.76v7.65a.9.9,0,0,0,1.8,0V9.89c0-.47.59-1,1.46-1s1.49.52,1.49,1v5.72h1.8V8.81c0-.28.58-.71,1.46-.71s1.53.48,1.53.75v6.89h1.8V10l.17-.12a2.1,2.1,0,0,1,1.18-.32c.93,0,1.5.44,1.5.68l0,6.5H27V11.87a1.91,1.91,0,0,1,1.12-.33c.86,0,1.52.51,1.52.94Z'/></svg>") 12 12,
+    grabbing !important;
+}
+.leaflet-dragging *, .leaflet-drag-target { cursor: inherit !important; }
+
+/* ==================== AGE GATE ==================== */
+.age-gate {
+  position: fixed; inset: 0; z-index: 14000;
+  background: rgba(0,0,0,0.75);
+  display: grid; place-items: center;
+}
+.age-card {
+  width: min(92vw, 560px);
+  background: #0f0f0f;
+  border: 2px solid #ffd60a;
+  border-radius: 16px;
+  padding: 22px 20px;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(255,214,10,0.25);
+}
+.age-title { font-size: 22px; color: #ffd60a; margin-bottom: 6px; }
+.age-desc  { color: #ddd; margin: 0 0 14px; }
+.age-btn   { display: inline-block; padding: 10px 16px; border-radius: 10px; border: 1px solid #ffd60a; background: #1a1a1a; color: #ffd60a; font-weight: 600; cursor: pointer; }
+.age-btn:hover { filter: brightness(1.1); }
+.age-hint { margin-top: 8px; font-size: 12px; color: #aaa; }
+
+/* ==================== INTRO OVERLAY ==================== */
+.intro-overlay {
+  position: fixed; inset: 0; z-index: 13000;
+  background: #000;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 2s ease; opacity: 1;
+}
+.intro-overlay.hidden { display: none; }
+.intro-overlay.fade-out { opacity: 0; pointer-events: none; }
+.intro-overlay video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+/* Hide any native controls UI for the intro video across engines */
+#introVideo::-webkit-media-controls { display: none !important; }
+#introVideo::-webkit-media-controls-enclosure { display: none !important; }
+#introVideo::-webkit-media-controls-panel { display: none !important; }
+#introVideo::-webkit-media-controls-play-button { display: none !important; }
+#introVideo::-webkit-media-controls-timeline { display: none !important; }
+#introVideo::-webkit-media-controls-current-time-display { display: none !important; }
+#introVideo::-webkit-media-controls-time-remaining-display { display: none !important; }
+#introVideo::-webkit-media-controls-mute-button { display: none !important; }
+#introVideo::-webkit-media-controls-volume-slider { display: none !important; }
+#introVideo::-webkit-media-controls-fullscreen-button { display: none !important; }
+/* Firefox */
+#introVideo::-moz-media-controls { display: none !important; }
+/* Edge/old MS */
+#introVideo::-ms-media-controls { display: none !important; }
+
+/* ===== FLOAT TOGGLE BUTTON ===== */
+.float-toggle {
+  position: fixed;
+  right: 18px;
+  bottom: 78px; /* above the music toggle */
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,214,10,0.35);
+  background: rgba(10,10,10,0.55);
+  backdrop-filter: blur(8px) saturate(1.1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.45), 0 0 12px rgba(255,214,10,0.08) inset;
+  display: grid; place-items: center;
+  cursor: pointer; z-index: 12050;
+  transition: transform 160ms ease, box-shadow 160ms ease, opacity 300ms ease;
+}
+.float-toggle:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.55), 0 0 16px rgba(255,214,10,0.12) inset;
+}
+.float-toggle .icon-on, .float-toggle .icon-off { display: none; }
+
+/* Hide float + music toggles while video is open */
+body.video-open .float-toggle,
+body.video-open .music-toggle {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px);
+}
+
+/* ==== Music Toggle (bottom-right) ==== */
+.music-toggle {
+  position: fixed;
+  right: 18px; bottom: 18px;
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,214,10,0.35);
+  background: rgba(10,10,10,0.55);
+  backdrop-filter: blur(8px) saturate(1.1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.45), 0 0 12px rgba(255,214,10,0.08) inset;
+  display: grid; place-items: center;
+  cursor: pointer; z-index: 12050;
+  transition: transform 160ms ease, box-shadow 160ms ease, opacity 300ms ease;
+}
+.music-toggle:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.55), 0 0 16px rgba(255,214,10,0.12) inset;
+}
+.music-toggle .icon-on, .music-toggle .icon-off { display: none; }
+
+/* Optional: dim behind the age gate */
+body.gate-active .music-toggle {
+  filter: blur(1px) brightness(0.85);
+  pointer-events: none;
+}
+
+/* ==== Language Toggle (bottom-right, above float/music) ==== */
+.lang-toggle {
+  position: fixed;
+  right: 18px; bottom: 138px;          /* sits above the float toggle (78px) */
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,214,10,0.35);
+  background: rgba(10,10,10,0.55);
+  backdrop-filter: blur(8px) saturate(1.1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.45), 0 0 12px rgba(255,214,10,0.08) inset;
+  display: grid; place-items: center;
+  cursor: pointer; z-index: 12050;
+  transition: transform 160ms ease, box-shadow 160ms ease, opacity 300ms ease;
+  font-weight: 800;
+  color: #ffd60a;
+}
+.lang-toggle:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.55), 0 0 16px rgba(255,214,10,0.12) inset;
+}
+/* Hide while video modal is open (match other toggles) */
+body.video-open .lang-toggle {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px);
+}
+
+
+
+/* ===== CONTRACT ADDRESS (top-right) ===== */
+.contract-address {
+  position: absolute;
+  top: 10px; right: 24px;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 28px; font-weight: 700; color: #ffd60a;
+  cursor: default; transition: opacity 0.25s ease;
+}
+.contract-address .ca-label { opacity: 0.85; letter-spacing: 0.3px; }
+.contract-address .ca-copy {
+  background: none; border: none; color: #ffd60a; font-size: 18px; cursor: pointer;
+  opacity: 0; transform: translateY(1px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.contract-address:hover .ca-copy { opacity: 1; transform: translateY(0); }
+.contract-address .ca-copy:hover { filter: brightness(1.2); }
+
+/* --- Keep custom cursor on M markers (idle/hover/active) --- */
+.leaflet-marker-icon,
+.leaflet-marker-icon:hover,
+.leaflet-marker-icon:active,
+.leaflet-marker-icon.leaflet-interactive,
+.leaflet-marker-pane img.leaflet-marker-icon {
+  cursor:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 485 485'><path fill='%23ffd60a' d='M382.5,69.429c-7.441,0-14.5,1.646-20.852,4.573c-4.309-23.218-24.7-40.859-49.148-40.859c-7.68,0-14.958,1.744-21.467,4.852C285.641,16.205,265.932,0,242.5,0c-23.432,0-43.141,16.206-48.533,37.995c-6.508-3.107-13.787-4.852-21.467-4.852c-27.57,0-50,22.43-50,50v122.222c-6.129-2.686-12.891-4.187-20-4.187c-27.57,0-50,22.43-50,50V354c0,72.233,58.766,131,131,131h118c72.233,0,131-58.767,131-131V119.429C432.5,91.858,410.07,69.429,382.5,69.429z M402.5,354c0,55.691-45.309,101-101,101h-118c-55.691,0-101-45.309-101-101V251.178c0-11.028,8.972-20,20-20s20,8.972,20,20v80h30V83.143c0-11.028,8.972-20,20-20s20,8.972,20,20v158.035h30V50c0-11.028,8.972-20,20-20c11.028,0,20,8.972,20,20v191.178h30V83.143c0-11.028,8.972-20,20-20s20,8.972,20,20v158.035h30v-121.75c0-11.028,8.972-20,20-20s20,8.972,20,20V354z'/></svg>") 12 12,
+    pointer !important;
+}
+.leaflet-marker-icon:active {
+  cursor:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 36 36'><path fill='%23ffd60a' d='M28.09,9.74a4,4,0,0,0-1.16.19c-.19-1.24-1.55-2.18-3.27-2.18A4,4,0,0,0,22.13,8,3.37,3.37,0,0,0,19,6.3a3.45,3.45,0,0,0-2.87,1.32,3.65,3.65,0,0,0-1.89-.51A3.05,3.05,0,0,0,11,9.89v.91c-1.06.4-4.11,1.8-4.91,4.84s.34,8,2.69,11.78a25.21,25.21,0,0,0,5.9,6.41.9.9,0,0,0,.53.17H25.55a.92.92,0,0,0,.55-.19,13.13,13.13,0,0,0,3.75-6.13A25.8,25.8,0,0,0,31.41,18v-5.5A3.08,3.08,0,0,0,28.09,9.74ZM29.61,18a24,24,0,0,1-1.47,9.15A12.46,12.46,0,0,1,25.2,32.2H15.47a23.75,23.75,0,0,1-5.2-5.72c-2.37-3.86-3-8.23-2.48-10.39A5.7,5.7,0,0,1,11,12.76v7.65a.9.9,0,0,0,1.8,0V9.89c0-.47.59-1,1.46-1s1.49.52,1.49,1v5.72h1.8V8.81c0-.28.58-.71,1.46-.71s1.53.48,1.53.75v6.89h1.8V10l.17-.12a2.1,2.1,0,0,1,1.18-.32c.93,0,1.5.44,1.5.68l0,6.5H27V11.87a1.91,1.91,0,0,1,1.12-.33c.86,0,1.52.51,1.52.94Z'/></svg>") 12 12,
+    grabbing !important;
+}
+
+/* ==================== FLOATING IMAGE ==================== */
+.floater {
+  position: fixed;
+  left: 0; top: 0;
+  width: 120px; height: auto;
+  pointer-events: auto; user-select: none;
+  z-index: 1000; /* under modal(9999) and navbar(12000) */
+  will-change: transform;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.35));
+  cursor: pointer;
+}
+@media (prefers-reduced-motion: reduce) { .floater { display: none; } }
+
+/* Force remove all map borders */
+#map, .map-frame, .leaflet-container {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ==================== SECTIONS / ABOUT ==================== */
+.section-spacer {
+  height: 18vh;                  /* gap so map bottom isn't visible when #about is in view */
+  background: transparent;
+}
+
+.section {
+  min-height: calc(100vh - 68px); /* full screen minus fixed navbar */
+  padding: 96px 24px 40px;        /* top padding > navbar for breathing room */
+  box-sizing: border-box;
+  scroll-margin-top: 80px;        /* anchor offset for fixed navbar */
+}
+
+.section--about {
+  background: rgba(8,8,8,0.75);
+  backdrop-filter: blur(4px) saturate(1.05);
+  border-top: 1px solid rgba(255,214,10,0.18);
+}
+
+.section h1 {
+  margin: 0 0 12px;
+  font-size: clamp(28px, 4vw, 44px);
+  color: #ffd60a;
+  letter-spacing: 0.3px;
+}
+.section p {
+  max-width: 900px;
+  color: #e9e9e9;
+  line-height: 1.6;
+  font-size: 16px;
+  margin: 0 0 10px;
+}
+.section .pill {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255,214,10,0.3);
+  border-radius: 999px;
+  color: #ffd60a;
+  background: rgba(255,214,10,0.06);
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+/* Give each major section a visual center guide (subtle, optional) */
+/* Keep the guide on sections only */
+.section::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 0 dotted rgba(255,214,10,0.12);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+/* If you also want a guide on the map, use ::after so ::before stays the scanner */
+.map-frame::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 0 dotted rgba(255,214,10,0.12);
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 570; /* below the sweep (which uses z-index: 580) */
+}
+
+
+/* Ensure sections truly act like full pages (you already have similar) */
+.section {
+  min-height: calc(100vh - 68px);   /* full height minus navbar */
+  position: relative;               /* for the center hint line */
+}
+
+.map-frame {
+  position: relative;
+}
+
+.age-danger {
+  margin: 10px 0 14px;
+  color: #ff3b30;           /* vivid red */
+  font-weight: 900;         /* extra bold */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 22px;          /* make the warning text larger */
+  text-align: center;       /* center-align for emphasis */
+}
+
+/* ===== Background for About–Contact sections ===== */
+.section--about,
+#roadmap,
+#howtobuy,
+#contact {
+  background: url('./images/black_wallpaper.jpg') center / cover no-repeat fixed;
+  backdrop-filter: blur(4px) saturate(1.05);
+  border-top: 1px solid rgba(255, 214, 10, 0.18);
+}
+
+/* ===== FUTURISTIC TIMELINE (scoped to #about) ===== */
+#about .futuristic-timeline {
+  --y: #ffd60a;
+  --rail-h: 6px;
+  --dot: 18px;
+  --glow: 32px;
+
+  position: relative;
+  width: min(1100px, 92vw);
+  margin: 28px auto 8px;
+  padding: 42px 6px 80px;
+  isolation: isolate;
+}
+
+#about .futuristic-timeline .tl-rail {
+  position: relative;
+  height: var(--rail-h);
+  border-radius: 999px;
+  background:
+    radial-gradient(closest-side, rgba(255,214,10,0.45), rgba(255,214,10,0.0)) 0 50%/100% var(--rail-h) no-repeat,
+    linear-gradient(90deg, rgba(255,214,10,0.15), rgba(255,214,10,0.35), rgba(255,214,10,0.15));
+  box-shadow:
+    0 0 24px rgba(255,214,10,0.10),
+    0 0 64px rgba(255,214,10,0.06) inset;
+  overflow: hidden;
+}
+
+/* animated sweep highlight */
+#about .futuristic-timeline .tl-rail::after {
+  content: "";
+  position: absolute;
+  inset: -60% -20%;
+  background:
+    linear-gradient(90deg,
+      rgba(255,214,10,0) 0%,
+      rgba(255,214,10,0.0) 40%,
+      rgba(255,214,10,0.65) 50%,
+      rgba(255,214,10,0.0) 60%,
+      rgba(255,214,10,0) 100%);
+  filter: blur(2px);
+  animation: tl-sweep 4.8s cubic-bezier(.2,.6,.2,1) infinite;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  z-index: 0;
+}
+@keyframes tl-sweep { to { transform: translateX(120%); } }
+
+/* dots */
+#about .futuristic-timeline .tl-dot {
+  --pos: 0%;
+  position: absolute;
+  left: calc(var(--pos));
+  top: 0;
+  transform: translate(-50%, calc(-50% - 3px));
+  width: var(--dot);
+  height: var(--dot);
+  border-radius: 50%;
+  border: none;
+  background: radial-gradient(circle at 50% 50%, var(--y) 0 45%, #141414 46% 100%);
+  box-shadow:
+    0 0 0 2px rgba(255,214,10,0.18),
+    0 0 var(--glow) rgba(255,214,10,0.25),
+    0 0 8px rgba(255,214,10,0.45) inset;
+  cursor: pointer;
+  transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
+  z-index: 2;
+}
+#about .futuristic-timeline .tl-dot:hover {
+  transform: translate(-50%, calc(-50% - 3px)) scale(1.08);
+  box-shadow:
+    0 0 0 2px rgba(255,214,10,0.28),
+    0 0 40px rgba(255,214,10,0.35),
+    0 0 12px rgba(255,214,10,0.55) inset;
+  filter: saturate(1.1);
+}
+#about .futuristic-timeline .tl-dot.is-active {
+  box-shadow:
+    0 0 0 2px rgba(255,214,10,0.38),
+    0 0 56px rgba(255,214,10,0.55),
+    0 0 14px rgba(255,214,10,0.75) inset;
+}
+
+/* cards (no borders, glassy text only look) */
+#about .futuristic-timeline .tl-card {
+  position: absolute;
+  inset: auto auto auto 0;
+  top: calc(100% + 18px);
+  width: clamp(240px, 34vw, 520px);
+  padding: 0;                 /* no borders/padding box — pure text vibe */
+  color: #eaeaea;
+  opacity: 0;
+  transform: translateX(-50%) translateY(-6px);
+  transition: opacity 220ms ease, transform 220ms ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+#about .futuristic-timeline .tl-card h3 {
+  margin: 0 0 6px;
+  font-size: clamp(16px, 2.6vw, 22px);
+  color: var(--y);
+  letter-spacing: 0.3px;
+  text-shadow: 0 0 18px rgba(255,214,10,0.18);
+}
+
+#about .futuristic-timeline .tl-card p {
+  margin: 0;
+  line-height: 1.55;
+  color: #e6e6e6;
+  max-width: 60ch;
+}
+
+/* position each card under its dot using the same --pos */
+#about .futuristic-timeline .tl-card[data-for="t1"] { left: 0%;     transform: translateX(-0%)  translateY(-6px); }
+#about .futuristic-timeline .tl-card[data-for="t2"] { left: 33.3%;  transform: translateX(-50%) translateY(-6px); text-align: center; }
+#about .futuristic-timeline .tl-card[data-for="t3"] { left: 66.6%;  transform: translateX(-50%) translateY(-6px); text-align: center; }
+#about .futuristic-timeline .tl-card[data-for="t4"] { left: 100%;   transform: translateX(-100%) translateY(-6px); text-align: right; }
+
+/* visible state */
+#about .futuristic-timeline .tl-card.is-open {
+  opacity: 1;
+  transform: translateX(var(--tx, -50%)) translateY(0);
+  pointer-events: auto;
+}
+
+/* mobile: stack vertically and center */
+@media (max-width: 820px) {
+  #about .futuristic-timeline { padding-bottom: 96px; }
+  #about .futuristic-timeline .tl-card {
+    left: 50% !important;
+    transform: translateX(-50%) translateY(-6px);
+    text-align: center !important;
+    width: min(92vw, 560px);
+  }
+}
+
+/* Place About content in a column so the timeline can sit near the bottom */
+#about.section {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 68px); /* already your section min-height; safe repeat */
+}
+
+/* Push the timeline down but keep some breathing room above the footer edge */
+#about .futuristic-timeline {
+  margin-top: auto;        /* pushes it to the bottom of the section */
+  margin-bottom: 48px;     /* not too low; room for labels */
+}
+
+/* Date labels under the rail, positioned at each dot's x */
+#about .futuristic-timeline .tl-label {
+  position: absolute;
+  top: calc(0px + 18px);      /* sits just below the rail */
+  transform: translate(-50%, 18px);
+  color: #cfcfcf;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow: 0 0 14px rgba(255,214,10,0.12);
+  z-index: 1;
+}
+
+/* we’ll position each label with left: same as its dot in JS;
+   add a tiny stagger so Aug/Oct aren’t on top of each other */
+#about .futuristic-timeline .tl-label[data-for="t3"] {
+  transform: translate(-50%, 26px);  /* a bit lower */
+}
+#about .futuristic-timeline .tl-label[data-for="t4"] {
+  transform: translate(-50%, 8px);   /* a bit higher */
+}
+
+/* ===== About section as a column so the timeline sits near bottom */
+#about.section {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 68px);
+}
+
+/* ===== Ruler Timeline container near bottom */
+#about .ruler-timeline {
+  --y: #ffd60a;
+  --rail-h: 6px;
+  --tick-h: 86px;         /* vertical line height */
+  --tick-w: 2px;
+  --head: 18px;           /* clickable head size */
+  --glow: 36px;
+  position: relative;
+  width: min(1100px, 92vw);
+  margin: auto;
+  margin-bottom: 56px;    /* keep room above page edge */
+  padding-top: 120px;     /* space ABOVE for the card to appear */
+  isolation: isolate;
+}
+
+/* rail */
+#about .ruler-timeline .rt-rail {
+  position: relative;
+  height: var(--rail-h);
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, rgba(255,214,10,0.18), rgba(255,214,10,0.45), rgba(255,214,10,0.18));
+  box-shadow: 0 0 22px rgba(255,214,10,0.12), 0 0 60px rgba(255,214,10,0.10) inset;
+  overflow: hidden;
+}
+
+/* animated sweep */
+#about .ruler-timeline .rt-rail::after {
+  content: "";
+  position: absolute;
+  inset: -70% -20%;
+  background: linear-gradient(90deg,
+    rgba(255,214,10,0) 0%,
+    rgba(255,214,10,0.0) 42%,
+    rgba(255,214,10,0.7) 50%,
+    rgba(255,214,10,0.0) 58%,
+    rgba(255,214,10,0) 100%);
+  filter: blur(2px);
+  mix-blend-mode: screen;
+  animation: rt-sweep 4.8s cubic-bezier(.2,.6,.2,1) infinite;
+}
+@keyframes rt-sweep { to { transform: translateX(120%); } }
+
+/* ticks (vertical lines) */
+#about .ruler-timeline .rt-tick {
+  position: absolute;
+  bottom: 0;                   /* flush with rail baseline */
+  transform: translateX(-50%);
+  width: var(--tick-w);
+  height: var(--tick-h);
+  background: linear-gradient(to top, var(--y) 0 30%, rgba(255,214,10,0.0));
+  box-shadow: 0 -8px 28px rgba(255,214,10,0.16);
+}
+
+/* clickable head on top of the tick line */
+#about .ruler-timeline .rt-tick .tick-head {
+  position: absolute;
+  top: calc(-1 * var(--head) + 2px);  /* sit slightly above the tick line */
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg); /* diamond */
+  width: var(--head);
+  height: var(--head);
+  border: none;
+  cursor: pointer;
+  background:
+    radial-gradient(circle at 50% 50%, var(--y) 0 45%, #141414 46% 100%);
+  box-shadow:
+    0 0 0 2px rgba(255,214,10,0.20),
+    0 0 var(--glow) rgba(255,214,10,0.35),
+    0 0 10px rgba(255,214,10,0.55) inset;
+  transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
+}
+#about .ruler-timeline .rt-tick .tick-head:hover {
+  transform: translate(-50%, -50%) rotate(45deg) scale(1.08);
+  box-shadow:
+    0 0 0 2px rgba(255,214,10,0.28),
+    0 0 46px rgba(255,214,10,0.45),
+    0 0 12px rgba(255,214,10,0.70) inset;
+  filter: saturate(1.05);
+}
+#about .ruler-timeline .rt-tick .tick-head[aria-expanded="true"] {
+  box-shadow:
+    0 0 0 2px rgba(255,214,10,0.36),
+    0 0 60px rgba(255,214,10,0.60),
+    0 0 16px rgba(255,214,10,0.85) inset;
+}
+
+/* message card ABOVE the rail (no border, just text) */
+/* message card ABOVE the rail (now truly aligned with its tick) */
+#about .ruler-timeline .rt-card {
+  position: absolute;
+  /* horizontal placement comes from JS (left: tick%) */
+  bottom: calc(var(--rail-h) + var(--tick-h) + 18px);
+  transform: translateX(-50%) translateY(6px);
+  width: clamp(240px, 32vw, 420px);
+  color: #eaeaea;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease, transform 220ms ease;
+  text-align: center;
+}
+#about .ruler-timeline .rt-card.is-open {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+#about .ruler-timeline .rt-card h3 {
+  margin: 0 0 6px;
+  font-size: clamp(16px, 2.6vw, 22px);
+  color: var(--y);
+  letter-spacing: 0.3px;
+  text-shadow: 0 0 18px rgba(255,214,10,0.18);
+}
+#about .ruler-timeline .rt-card p {
+  margin: 0;
+  line-height: 1.55;
+  color: #e6e6e6;
+}
+#about .ruler-timeline .rt-card.is-open {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+/* date captions under the rail (kept subtle) */
+#about .ruler-timeline .rt-date {
+  position: absolute;
+  top: calc(var(--rail-h) + 12px);
+  transform: translateX(-50%);
+  color: #cfcfcf;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  text-shadow: 0 0 14px rgba(255,214,10,0.10);
+  pointer-events: none;
+}
+
+/* mobile tweaks */
+@media (max-width: 840px) {
+  #about .ruler-timeline { padding-top: 140px; }
+  #about .ruler-timeline .rt-card { width: min(92vw, 560px); }
+}
+
+/* ===== Move date captions clearly below the rail ===== */
+#about .ruler-timeline .rt-date {
+  position: absolute;
+  /* push well below the rail and tick base */
+  top: calc(var(--rail-h) + var(--tick-h) + 48px);
+  transform: translateX(-50%);
+  color: #cfcfcf;
+  font-size: 13px;
+  letter-spacing: 0.25px;
+  white-space: nowrap;
+  text-shadow: 0 0 14px rgba(255,214,10,0.10);
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+
+
+/* === Make room above for the slider and keep timeline higher === */
+#about .ruler-timeline {
+  margin-bottom: 24px;          /* timeline sits a bit higher */
+  padding-bottom: 140px;        /* reserve space for slider block */
+}
+
+/* Narrow cards so they never touch at 33% spacing */
+#about .ruler-timeline .rt-card {
+  width: clamp(240px, 26vw, 380px);   /* fits inside a ~33% column */
+}
+
+/* Dim state when showing two cards */
+#about .ruler-timeline .rt-card.dim {
+  opacity: 0.5 !important;
+}
+
+/* === Slider block === */
+#about .ruler-timeline .rt-slider {
+  position: absolute;
+  left: 50%;
+  bottom: 0;                      /* anchors to reserved padding-bottom */
+  transform: translateX(-50%);
+  width: min(1100px, 92vw);
+  display: grid;
+  gap: 14px;
+}
+
+/* Big modern range input */
+#about .ruler-timeline .rt-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 18px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255,214,10,0.25), rgba(255,214,10,0.6));
+  outline: none;
+  box-shadow: inset 0 0 0 1px rgba(255,214,10,0.25), 0 6px 22px rgba(0,0,0,0.45);
+}
+
+/* track (webkit) */
+#about .ruler-timeline .rt-range::-webkit-slider-runnable-track {
+  height: 18px;
+  border-radius: 999px;
+  background: transparent; /* already styled on input */
+}
+/* thumb (webkit) */
+#about .ruler-timeline .rt-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 32px; height: 32px;
+  margin-top: -7px; /* center thumb on 18px track */
+  border-radius: 10px;
+  transform: rotate(45deg); /* diamond vibe like tick heads */
+  background: radial-gradient(circle at 50% 50%, #ffd60a 0 45%, #1a1a1a 46% 100%);
+  box-shadow: 0 0 0 2px rgba(255,214,10,0.35), 0 0 40px rgba(255,214,10,0.45), 0 0 12px rgba(255,214,10,0.7) inset;
+  cursor: pointer;
+}
+
+/* Firefox track & thumb */
+#about .ruler-timeline .rt-range::-moz-range-track {
+  height: 18px;
+  border-radius: 999px;
+  background: transparent;
+}
+#about .ruler-timeline .rt-range::-moz-range-thumb {
+  width: 32px; height: 32px;
+  border: none;
+  border-radius: 10px;
+  transform: rotate(45deg);
+  background: radial-gradient(circle at 50% 50%, #ffd60a 0 45%, #1a1a1a 46% 100%);
+  box-shadow: 0 0 0 2px rgba(255,214,10,0.35), 0 0 40px rgba(255,214,10,0.45), 0 0 12px rgba(255,214,10,0.7) inset;
+  cursor: pointer;
+}
+
+/* marker labels under slider */
+#about .ruler-timeline .rt-marks {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  font-size: 12px;
+  color: #cfcfcf;
+  letter-spacing: 0.25px;
+}
+#about .ruler-timeline .rt-marks span {
+  text-align: center;
+  text-shadow: 0 0 10px rgba(255,214,10,0.10);
+}
+
+/* ===== Slider-only timeline container (sits higher to leave room for slider) ===== */
+#about .slider-timeline {
+  --y: #ffd60a;
+  position: relative;
+  width: min(1100px, 92vw);
+  margin: 0 auto 40px;     /* keep it higher in the section */
+  padding-bottom: 140px;   /* room for slider block */
+  isolation: isolate;
+}
+
+/* Cards anchor to percentage columns via --pos; never overlap due to width */
+#about .slider-timeline .rt-card {
+  position: absolute;
+  left: var(--pos);
+  bottom: calc(140px + 20px);            /* above the slider area */
+  transform: translateX(-50%);
+  width: clamp(240px, 26vw, 380px);      /* narrow enough so neighbors don't collide */
+  color: #eaeaea;
+  opacity: 0;                             /* hidden by default; JS toggles */
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 180ms ease;
+  text-align: center;
+}
+#about .slider-timeline .rt-card.is-open { 
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+#about .slider-timeline .rt-card.dim { opacity: 0.5 !important; }
+
+#about .slider-timeline .rt-card h3 {
+  margin: 0 0 6px;
+  font-size: clamp(16px, 2.6vw, 22px);
+  color: var(--y);
+  letter-spacing: 0.3px;
+  text-shadow: 0 0 18px rgba(255,214,10,0.18);
+}
+#about .slider-timeline .rt-card p {
+  margin: 0;
+  line-height: 1.55;
+  color: #e6e6e6;
+}
+
+/* Optional faint vertical guides at 0/33/66/100 to visually hint “columns” */
+#about .slider-timeline::before,
+#about .slider-timeline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to right,
+      rgba(255,214,10,0.12) 0 1px, transparent 1px 25%,
+      rgba(255,214,10,0.12) 25% calc(25% + 1px), transparent calc(25% + 1px) 50%,
+      rgba(255,214,10,0.12) 50% calc(50% + 1px), transparent calc(50% + 1px) 75%,
+      rgba(255,214,10,0.12) 75% calc(75% + 1px), transparent calc(75% + 1px) 100%);
+  opacity: 0.12;
+  mask: linear-gradient(#000, #000) bottom / 100% calc(100% - 140px) no-repeat; /* don't draw over slider area */
+}
+
+/* ===== Big modern slider ===== */
+/* Longer slider near the bottom */
+#about .slider-timeline .rt-slider {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;                 /* still not touching the edge */
+  transform: translateX(-50%);
+  width: min(2000px, 96vw);     /* <-- longer: was ~1100px/92vw */
+  display: grid;
+  gap: 12px;
+  z-index: 999;
+}
+
+
+#about .slider-timeline .rt-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 18px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255,214,10,0.25), rgba(255,214,10,0.6));
+  outline: none;
+  box-shadow: inset 0 0 0 1px rgba(255,214,10,0.25), 0 6px 22px rgba(0,0,0,0.45);
+}
+
+/* track (webkit) */
+#about .slider-timeline .rt-range::-webkit-slider-runnable-track {
+  height: 18px; border-radius: 999px; background: transparent;
+}
+/* thumb (webkit) */
+#about .slider-timeline .rt-range::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 32px; height: 32px; margin-top: -7px;
+  border-radius: 10px; transform: rotate(45deg);
+  background: radial-gradient(circle at 50% 50%, #ffd60a 0 45%, #1a1a1a 46% 100%);
+  box-shadow: 0 0 0 2px rgba(255,214,10,0.35), 0 0 40px rgba(255,214,10,0.45), 0 0 12px rgba(255,214,10,0.7) inset;
+  cursor: pointer;
+}
+
+/* Firefox */
+#about .slider-timeline .rt-range::-moz-range-track {
+  height: 18px; border-radius: 999px; background: transparent;
+}
+#about .slider-timeline .rt-range::-moz-range-thumb {
+  width: 32px; height: 32px; border: none; border-radius: 10px; transform: rotate(45deg);
+  background: radial-gradient(circle at 50% 50%, #ffd60a 0 45%, #1a1a1a 46% 100%);
+  box-shadow: 0 0 0 2px rgba(255,214,10,0.35), 0 0 40px rgba(255,214,10,0.45), 0 0 12px rgba(255,214,10,0.7) inset;
+  cursor: pointer;
+}
+
+/* Labels under slider */
+#about .slider-timeline .rt-marks {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  font-size: 12px; color: #cfcfcf; letter-spacing: 0.25px;
+}
+#about .slider-timeline .rt-marks span {
+  text-align: center; text-shadow: 0 0 10px rgba(255,214,10,0.10);
+}
+
+/* Mobile: keep text readable and spaced */
+@media (max-width: 840px) {
+  #about .slider-timeline .rt-card { width: min(92vw, 520px); }
+}
+/* Put the slider near the bottom with a bit of breathing room */
+#about .slider-timeline .rt-slider {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;                  /* closer to the page bottom */
+  transform: translateX(-50%);
+  width: min(1100px, 92vw);
+  display: grid;
+  gap: 12px;
+}
+
+/* Make sure cards sit comfortably above the slider area */
+#about .slider-timeline .rt-card {
+  bottom: calc(12px + 18px + 24px + 24px); /* slider bottom + track + thumb + labels */
+}
+
+/* Wrapper so we can draw a custom animated fill under the input */
+#about .slider-timeline .rt-range-wrap {
+  position: relative;
+  height: 24px;                  /* enough to house the 18px track + 32px diamond thumb overlap */
+  isolation: isolate;            /* keep glow blending contained */
+}
+
+/* Base track look (muted, glassy) */
+#about .slider-timeline .rt-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 18px;
+  border-radius: 999px;
+  background: rgba(255,214,10,0.12);
+  outline: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,214,10,0.22),
+    0 6px 22px rgba(0,0,0,0.45);
+  position: relative;
+  z-index: 2; /* above the animated fill so the thumb remains clickable */
+}
+
+/* WebKit track & thumb */
+#about .slider-timeline .rt-range::-webkit-slider-runnable-track {
+  height: 18px; border-radius: 999px; background: transparent;
+}
+#about .slider-timeline .rt-range::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 32px; height: 32px; margin-top: -7px;
+  border-radius: 10px; transform: rotate(45deg);
+  background: radial-gradient(circle at 50% 50%, #ffd60a 0 45%, #1a1a1a 46% 100%);
+  box-shadow:
+    0 0 0 2px rgba(255,214,10,0.35),
+    0 0 40px rgba(255,214,10,0.45),
+    0 0 12px rgba(255,214,10,0.7) inset;
+  cursor: pointer;
+}
+
+/* Firefox */
+#about .slider-timeline .rt-range::-moz-range-track {
+  height: 18px; border-radius: 999px; background: transparent;
+}
+#about .slider-timeline .rt-range::-moz-range-thumb {
+  width: 32px; height: 32px; border: none; border-radius: 10px; transform: rotate(45deg);
+  background: radial-gradient(circle at 50% 50%, #ffd60a 0 45%, #1a1a1a 46% 100%);
+  box-shadow:
+    0 0 0 2px rgba(255,214,10,0.35),
+    0 0 40px rgba(255,214,10,0.45),
+    0 0 12px rgba(255,214,10,0.7) inset;
+  cursor: pointer;
+}
+
+/* Animated "energy" fill inside the track (width driven by --v) */
+#about .slider-timeline .rt-fill {
+  --v: 0%;                       /* JS updates this to 0%..100% */
+  position: absolute;
+  left: 0; top: 3px;             /* inset to sit inside the 18px track nicely */
+  height: 12px;
+  width: var(--v);
+  border-radius: 999px;
+  pointer-events: none;
+  z-index: 1;
+
+  /* Layer 1: solid glow base */
+  background:
+    radial-gradient(16px 60% at 0% 50%, rgba(255,214,10,0.65), rgba(255,214,10,0) 70%) left / 24px 100% no-repeat,
+    linear-gradient(90deg, rgba(255,214,10,0.22), rgba(255,214,10,0.65));
+  box-shadow:
+    0 0 22px rgba(255,214,10,0.35),
+    0 0 12px rgba(255,214,10,0.25) inset;
+
+  /* Layer 2: animated diagonal light streaks on top */
+  overflow: hidden;
+}
+#about .slider-timeline .rt-fill::after {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(
+      120deg,
+      rgba(255,214,10,0.15) 0px,
+      rgba(255,214,10,0.15) 8px,
+      rgba(255,214,10,0.00) 8px,
+      rgba(255,214,10,0.00) 18px
+    );
+  filter: blur(0.4px);
+  mix-blend-mode: screen;
+  animation: rt-flow 2.6s linear infinite;
+  opacity: 0.9;
+}
+@keyframes rt-flow {
+  from { background-position: 0 0; }
+  to   { background-position: 240px 0; }
+}
+
+/* Labels under slider — keep them tight and bottom-aligned */
+#about .slider-timeline .rt-marks {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  font-size: 12px; color: #cfcfcf; letter-spacing: 0.25px;
+  margin-top: 2px;
+}
+#about .slider-timeline .rt-marks span {
+  text-align: center; text-shadow: 0 0 10px rgba(255,214,10,0.10);
+}
+
+/* Slight extra bottom spacing on very small screens */
+@media (max-width: 640px) {
+  #about .slider-timeline .rt-slider { bottom: 16px; }
+}
+
+/* Shift all visible timeline card content 50px to the right */
+#about .slider-timeline .rt-card {
+  transform: translateX(calc(-50% + 100px));   /* move 50px to the right */
+  text-align: left;                           /* optional: keep text left-aligned */
+}
+
+/* Ensure the animation for showing cards still works smoothly */
+#about .slider-timeline .rt-card.is-open {
+  transform: translateX(calc(-50% + 100px)) translateY(0);
+}
+
+/* If you want only the inner text shifted (not the whole card box), use this instead: */
+/*
+#about .slider-timeline .rt-card > * {
+  position: relative;
+  left: 50px;
+}
+*/
+
+/* === Uniform height + narrower spacing for timeline cards === */
+#about .slider-timeline .rt-card {
+  bottom: calc(180px);                     /* make all cards start at same Y */
+  width: clamp(200px, 20vw, 320px);        /* narrower than before */
+  line-height: 1.4;                        /* slightly tighter line spacing */
+  text-align: center;
+  transform: translateX(-50%) translateY(0);
+  opacity: 0;
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+/* when open: keep same baseline, fade in smoothly */
+#about .slider-timeline .rt-card.is-open {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* space cards a bit closer horizontally */
+#about .slider-timeline .rt-card:nth-child(1) { left: 0%; }
+#about .slider-timeline .rt-card:nth-child(2) { left: 33.3%; }
+#about .slider-timeline .rt-card:nth-child(3) { left: 66.6%; }
+#about .slider-timeline .rt-card:nth-child(4) { left: 100%; }
+
+/* keep text compact and elegant */
+#about .slider-timeline .rt-card h3 {
+  font-size: clamp(15px, 2vw, 20px);
+  margin-bottom: 4px;
+  letter-spacing: 0.4px;
+}
+
+#about .slider-timeline .rt-card p {
+  font-size: clamp(12px, 1.6vw, 15px);
+  color: #ddd;
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+/* ===== Perfectly aligned timeline cards ===== */
+#about .slider-timeline {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* align titles evenly across the top */
+  gap: 4%;                 /* small consistent gap between cards */
+  margin-top: 40px;
+}
+
+/* Each card: fixed height, top-aligned text */
+#about .slider-timeline .rt-card {
+  position: relative;
+  flex: 1 1 0;
+  max-width: 280px;              /* slightly narrower */
+  min-height: 160px;             /* same height for all cards */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;   /* text starts from the top */
+  align-items: center;
+  text-align: center;
+  padding: 8px 12px;
+  box-sizing: border-box;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 250ms ease, transform 250ms ease;
+}
+
+/* When visible */
+#about .slider-timeline .rt-card.is-open {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* When dimmed (two-card overlap case) */
+#about .slider-timeline .rt-card.dim {
+  opacity: 0.5 !important;
+}
+
+/* Titles perfectly aligned across top */
+#about .slider-timeline .rt-card h3 {
+  font-size: clamp(16px, 2vw, 20px);
+  margin: 0 0 6px;
+  color: #ffd60a;
+  letter-spacing: 0.3px;
+  line-height: 1.3;
+}
+
+/* Text body slightly compact */
+#about .slider-timeline .rt-card p {
+  margin: 0;
+  font-size: clamp(12px, 1.6vw, 15px);
+  line-height: 1.4;
+  color: #ddd;
+  max-width: 95%;
+}
+
+/* Maintain consistent alignment on smaller screens */
+@media (max-width: 840px) {
+  #about .slider-timeline {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  #about .slider-timeline .rt-card {
+    max-width: 90%;
+    min-height: auto;
+  }
+}
+
+/* Revert slider timeline to positioned container, not flex */
+#about .slider-timeline {
+  position: relative;
+  width: min(1400px, 96vw);   /* match your longer slider width */
+  margin: 0 auto;
+}
+
+/* Cards: absolute at 0%, 33.3%, 66.6%, 100% so all 4 are visible */
+#about .slider-timeline .rt-card {
+  position: absolute;
+  bottom: 180px;                           /* uniform title height row */
+  width: clamp(190px, 18vw, 260px);        /* a bit slimmer to avoid overlap */
+  text-align: center;
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+/* anchor each card to its column */
+#about .slider-timeline .rt-card[data-for="t1"] { left: 0%; }
+#about .slider-timeline .rt-card[data-for="t2"] { left: 33.3%; }
+#about .slider-timeline .rt-card[data-for="t3"] { left: 66.6%; }
+#about .slider-timeline .rt-card[data-for="t4"] { left: 100%; }
+
+#about .slider-timeline .rt-card.is-open {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+#about .slider-timeline .rt-card.dim { opacity: 0.5 !important; }
+
+/* Keep headings/body compact */
+#about .slider-timeline .rt-card h3 {
+  margin: 0 0 6px;
+  font-size: clamp(16px, 2vw, 20px);
+  line-height: 1.3;
+}
+#about .slider-timeline .rt-card p {
+  margin: 0 auto;
+  max-width: 92%;
+  font-size: clamp(12px, 1.6vw, 15px);
+  line-height: 1.4;
+}
+
+#about .slider-timeline .rt-card {
+  bottom: -930px; /* lower baseline for all cards */
+}
+
+/* === Align all timeline card titles perfectly === */
+#about .slider-timeline .rt-card {
+  position: absolute;
+  bottom: -430px;                  /* your current lowered position */
+  width: clamp(190px, 18vw, 260px);
+  transform: translateX(-50%);
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease, transform 200ms ease;
+  
+  /* new layout rules */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;   /* align items from the top */
+  align-items: center;
+  padding-top: 12px;             /* ensures same title offset from card top */
+  min-height: 160px;             /* consistent card height */
+}
+
+/* make sure when visible the card stays top-aligned */
+#about .slider-timeline .rt-card.is-open {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+#about .slider-timeline .rt-card.dim {
+  opacity: 0.5 !important;
+}
+
+/* ensure all h3 titles align perfectly */
+#about .slider-timeline .rt-card h3 {
+  font-size: clamp(16px, 2vw, 20px);
+  color: #ffd60a;
+  letter-spacing: 0.3px;
+  line-height: 1.3;
+  margin: 0 0 6px 0;
+  height: 26px;                   /* lock consistent title height */
+  display: flex;
+  align-items: flex-end;          /* vertically align text bottom of that height */
+  justify-content: center;
+}
+
+/* body text consistent spacing */
+#about .slider-timeline .rt-card p {
+  margin: 0;
+  font-size: clamp(12px, 1.6vw, 15px);
+  line-height: 1.4;
+  color: #ddd;
+  max-width: 90%;
+}
+
+/* Cards are anchored by a computed top offset (just below the Lore H1) */
+#about .slider-timeline .rt-card {
+  position: absolute;
+  top: var(--cardsTop, 110px);         /* JS sets this to H1 bottom + gap */
+  left: 0;                             /* left is controlled by data-for rules below */
+  transform: translateX(-50%);
+  /* Wider, but guaranteed not to touch neighbors: center-anchored at 0/33/66/100 */
+  width: min(clamp(220px, 22vw, 360px), calc(24% - 18px));
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+/* Anchor each card to its column center */
+#about .slider-timeline .rt-card[data-for="t1"] { left: 0%; }
+#about .slider-timeline .rt-card[data-for="t2"] { left: 33.3%; }
+#about .slider-timeline .rt-card[data-for="t3"] { left: 66.6%; }
+#about .slider-timeline .rt-card[data-for="t4"] { left: 100%; }
+
+#about .slider-timeline .rt-card.is-open {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+#about .slider-timeline .rt-card.dim { opacity: 0.5 !important; }
+
+/* Tight, consistent typography */
+#about .slider-timeline .rt-card h3 {
+  margin: 0 0 6px;
+  font-size: clamp(16px, 2vw, 20px);
+  line-height: 1.3;
+  color: #ffd60a;
+  letter-spacing: 0.3px;
+}
+#about .slider-timeline .rt-card p {
+  margin: 0 auto;
+  max-width: 96%;                 /* wider text block but not full edge */
+  font-size: clamp(12px, 1.6vw, 15px);
+  line-height: 1.45;
+  color: #ddd;
+}
+
+/* Responsive: narrow cards on small screens to avoid touching */
+@media (max-width: 840px) {
+  #about .slider-timeline .rt-card {
+    width: min(88vw, 360px);
+  }
+}
+
+/* === Exact alignment for slider date labels === */
+#about .slider-timeline .rt-marks {
+  position: relative;
+  display: block;               /* override earlier grid */
+  height: 18px;
+  margin-top: 2px;
+}
+
+#about .slider-timeline .rt-marks .rt-mark {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);  /* default for middle marks */
+  white-space: nowrap;
+  font-size: 12px;
+  color: #cfcfcf;
+  letter-spacing: 0.25px;
+  text-shadow: 0 0 10px rgba(255,214,10,0.10);
+  pointer-events: none;
+}
+
+#about .slider-timeline .rt-marks .rt-mark.edge-start {
+  transform: translateX(0);     /* flush-left at 0% */
+  text-align: left;
+}
+
+#about .slider-timeline .rt-marks .rt-mark.edge-end {
+  transform: translateX(-100%); /* flush-right at 100% */
+  text-align: right;
+}
+
+/* === Inset edge cards (first & last) 40px inward === */
+
+
+/* Default transform uses -50%; introduce an overridable shift var */
+#about .slider-timeline .rt-card {
+  --edgeShift: 0px;
+}
+
+/* Move only the edge cards inward 40px */
+#about .slider-timeline .rt-card[data-for="t1"] { --edgeShift: 80px; }   /* left edge -> push right */
+#about .slider-timeline .rt-card[data-for="t4"] { --edgeShift: -80px; }  /* right edge -> push left */
+
+/* Apply the shift both in default and open states (override any earlier transforms) */
+#about .slider-timeline .rt-card,
+#about .slider-timeline .rt-card.is-open {
+  transform: translateX(calc(-50% + var(--edgeShift))) translateY(0) !important;
+}
+
+
+
+/* === Make timeline cards 40% wider, ignoring parent constraints === */
+#about .slider-timeline .rt-card {
+  width: 30%;                /* 40% wider than original */
+  max-width: none !important; /* ignore any previous max-width */
+  overflow: visible !important; /* allow content to extend beyond parent */
+  z-index: 10;                /* keep it above nearby elements */
+}
+/* Roadmap video: right-side, consistent with your spacing */
+#roadmap { position: relative; }
+
+.roadmap-side-video {
+  position: fixed;              /* stick to viewport */
+  bottom: 140px;                /* move up 100 px from window bottom */
+  right: 80px;                  /* keep same right spacing */
+  width: min(840px, 60vw);      /* responsive width */
+  aspect-ratio: 16 / 9;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.roadmap-side-video canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+
+
+
+/* Make space so text doesn’t run under the video on large screens */
+@media (min-width: 1000px) {
+  #roadmap .roadmap-grid {
+    max-width: calc(100% - 460px); /* account for the video width + gap */
+  }
+}
+
+/* On smaller screens, hide (or shrink) the side video */
+@media (max-width: 999px) {
+  .roadmap-side-video {
+    position: static;
+    width: 100%;
+    margin: 14px 0 0;
+    pointer-events: none;
+  }
+}
+
+/* === Highlighted phase label inside roadmap text === */
+#roadmap .roadmap-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* 🔥 tighter spacing between phases */
+  margin-top: 40px;
+  margin-bottom: 80px;
+  position: relative;
+  margin-top: -80px;   
+  margin-left: -120px;
+  scale: 0.8;
+}
+
+/* Each roadmap phase card */
+#roadmap .phase-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 20px 28px;
+  border-left: 3px solid #ffd60a;
+  border-radius: 6px;
+  line-height: 1.6;
+  max-width: 900px;
+  animation: fadeUp 0.8s ease forwards;
+}
+
+/* Gold phase label */
+#roadmap .phase-label {
+  display: block;
+  color: #ffd60a;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+/* === Yellow connector line between cards === */
+#roadmap .phase-card:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  bottom: -10px; /* small gap before next card */
+  left: 28px;    /* aligns with text start */
+  width: calc(100% - 56px); /* matches padding (28px * 2) */
+  height: 2px;
+  background: linear-gradient(to right, #ffd60a, transparent 90%);
+  opacity: 0.8;
+}
+
+/* Subtle hover glow for interactivity */
+#roadmap .phase-card:hover {
+  background: rgba(255, 214, 10, 0.05);
+  box-shadow: 0 0 10px rgba(255, 214, 10, 0.15);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+/* Fade-up entry animation */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/* For single-column view (mobile), keep spacing generous */
+@media (max-width: 860px) {
+  #roadmap .phase-card {
+    margin-bottom: clamp(60px, 8vw, 100px);
+  }
+}
+/* === CONTACT SECTION: Centered X logo === */
+/* CONTACT: match Lore/Roadmap title position exactly */
+.section--contact {
+  position: relative;
+  /* make it behave like the other sections */
+  display: block;                 /* was flex */
+  min-height: 100vh;
+  padding: 96px 24px 40px;        /* same as .section */
+  background: url('images/black_wallpaper.jpg') center/cover no-repeat fixed;
+  border-top: 1px solid rgba(255, 214, 10, 0.18);  /* matches your other sections */
+}
+
+/* Use the same heading rules the other sections get */
+.section--contact h1 {
+  /* no extra alignment overrides here — let .section h1 styles apply */
+  margin: 0 0 12px;               /* matches .section h1 */
+  font-size: clamp(28px, 4vw, 44px);
+  color: #ffd60a;
+  letter-spacing: 0.3px;
+}
+
+/* Keep the X logo perfectly centered, independent of the title */
+.section--contact .x-link {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  animation: floatX 4s ease-in-out infinite;
+}
+
+.section--contact .x-logo {
+  width: 160px;
+  height: auto;
+  filter: drop-shadow(0 0 18px rgba(255,214,10,0.4));
+  transition: transform 0.35s ease, filter 0.35s ease;
+  cursor: pointer;
+}
+.section--contact .x-logo:hover {
+  transform: translateY(-4px) scale(1.1);
+  filter: drop-shadow(0 0 30px rgba(255,214,10,0.8));
+}
+
+@keyframes floatX {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+  50%      { transform: translate(-50%, -50%) translateY(-10px); }
+}
+
+/* === Navbar disabled (coming soon) items === */
+.nav-links .nav-disabled {
+  color: #777;                      /* grey tone */
+  opacity: 0.7;
+  cursor: default;
+  pointer-events: none;             /* disables clicks */
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0.25px;
+  position: relative;
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+/* Optional subtle "coming soon" hover glow (visual only) */
+.nav-links .nav-disabled:hover {
+  opacity: 0.9;
+  color: #999;
+}
+
+/* Keep spacing consistent with clickable nav items */
+.nav-links li {
+  list-style: none;
+  display: inline-block;
+  margin: 0 10px;
+}
+/* === Brand Logo: Futuristic Highlight === */
+.brand-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 18px;
+  transition: transform 0.4s ease;
+}
+
+.brand-wrap:hover {
+  transform: scale(1.08) rotate(3deg);
+}
+
+/* The logo image itself */
+.brand-img {
+  z-index: 2;
+  filter: drop-shadow(0 0 8px rgba(255, 214, 10, 0.5))
+          drop-shadow(0 0 20px rgba(255, 214, 10, 0.35));
+  transition: filter 0.4s ease, transform 0.4s ease;
+}
+
+/* Animated ring behind the logo */
+.brand-ring {
+  position: absolute;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 214, 10, 0.25) 0%,
+    rgba(255, 214, 10, 0.05) 70%,
+    transparent 100%
+  );
+  filter: blur(2px);
+  z-index: 1;
+  animation: brandPulse 3.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Glowing pulse animation */
+@keyframes brandPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+}
+
+/* Extra pop on hover */
+.brand-wrap:hover .brand-img {
+  filter: drop-shadow(0 0 12px rgba(255, 214, 10, 0.7))
+          drop-shadow(0 0 28px rgba(255, 214, 10, 0.55));
+}
+.brand-wrap::after {
+  content: "";
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    rgba(255, 214, 10, 0.0),
+    rgba(255, 214, 10, 0.15),
+    rgba(255, 214, 10, 0.0)
+  );
+  animation: spinAura 6s linear infinite;
+  z-index: 0;
+  filter: blur(4px);
+  pointer-events: none;
+}
+@keyframes spinAura { to { transform: rotate(360deg); } }
+
+.lore-images {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  max-width: 1000px;
+  margin: 60px auto 0;
+  position: relative;
+  z-index: 3;
+}
+
+.lore-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 12px;
+  opacity: 0.9;
+  filter: grayscale(0.3) brightness(0.85);
+  transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
+}
+
+.lore-img.fade {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* === Chengdu Crown Marker === */
+
+/* ==== Language Toggle (bottom-right, above float/music) ==== */
+.lang-toggle {
+  position: fixed;
+  right: 18px; bottom: 138px;          /* sits above the float toggle (78px) */
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,214,10,0.35);
+  background: rgba(10,10,10,0.55);
+  backdrop-filter: blur(8px) saturate(1.1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.45), 0 0 12px rgba(255,214,10,0.08) inset;
+  display: grid; place-items: center;
+  cursor: pointer; z-index: 12050;
+  transition: transform 160ms ease, box-shadow 160ms ease, opacity 300ms ease;
+  font-weight: 800;
+  color: #ffd60a;
+}
+.lang-toggle:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.55), 0 0 16px rgba(255,214,10,0.12) inset;
+}
+/* Hide while video modal is open (match other toggles) */
+body.video-open .lang-toggle {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px);
+}
+
+/* ==================== Chinese (zh) fixes for Roadmap ==================== */
+/* Use a CJK-first font stack so Chinese doesn't render smaller */
+html[lang^="zh"] body {
+  font-family: "Noto Sans SC","PingFang SC","Microsoft YaHei",
+               "Hiragino Sans GB","Heiti SC",
+               "Penumbra Sans Std","Segoe UI",Roboto,sans-serif !important;
+}
+
+/* The grid currently uses scale: .8 and negative margins — reset in zh */
+html[lang^="zh"] #roadmap .roadmap-grid {
+  scale: 1 !important;
+  margin-top: 16px !important;   /* was -80px */
+  margin-left: 0 !important;     /* was -120px */
+}
+
+/* Give the title a little more breathing room in zh */
+html[lang^="zh"] #roadmap h1 {
+  margin-bottom: 18px;           /* prevents overlap */
+}
+
+/* Make paragraph text slightly larger and more relaxed for CJK */
+html[lang^="zh"] #roadmap .phase-card {
+  line-height: 1.9;
+  font-size: 1.02rem;
+}
+
+/* Safer wrapping for long Chinese lines (doesn't add visible hyphens) */
+html[lang^="zh"] #roadmap .phase-card p {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Keep the yellow label readable and on its own line */
+html[lang^="zh"] #roadmap .phase-label {
+  display: block;
+  margin-bottom: 6px;
+  white-space: normal;
+}
+

@@ -1,0 +1,640 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metroman Map</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- ===== FLOATING IMAGE ===== -->
+    <img id="floater1" class="floater" src="./floatingphotos/cockcropped.png" alt="" />
+
+    <!-- ===== NAVBAR (futuristic) ===== -->
+    <nav class="navbar" id="navbar">
+      <div class="nav-inner">
+        <div class="nav-left">
+          <a href="#mapPanel" aria-label="Go to map" class="brand-wrap">
+            <span class="brand-ring" aria-hidden="true"></span>
+            <img src="./images/m_premium_circle.png" alt="MetroMap" class="brand-img" width="44" height="44" />
+          </a>
+
+ <ul class="nav-links" id="navLinks">
+  <li><a href="#about" data-target="about">Lore</a></li>
+  <li><a href="#roadmap" data-target="roadmap">Roadmap</a></li>
+  <li><a href="#howtobuy" data-target="howtobuy">Contact Us</a></li>
+
+  <!-- Coming Soon items -->
+  <li><span class="nav-disabled">Gallery</span></li>
+  <li><span class="nav-disabled">PFP Generator</span></li>
+  <li><span class="nav-disabled">Butt Plug Hunt</span></li>
+
+  <span class="nav-underline" id="navUnderline"></span>
+</ul>
+
+        </div>
+
+        <div class="contract-address" title="Copy to clipboard" style="font-size: 14px; margin-top: 10px;">
+          <span class="ca-label">CA:</span>
+          <span class="ca-value" id="contractValue">Coming Soon</span>
+          <button class="ca-copy" id="copyCA">📋</button>
+        </div>
+        
+      </div>
+    </nav>
+
+    <!-- ===== AGE GATE ===== -->
+  <!-- ===== AGE GATE ===== -->
+  <div id="ageGate" class="age-gate" role="dialog" aria-modal="true" aria-labelledby="ageTitle" aria-describedby="ageDesc">
+    <div class="age-card">
+
+      <p id="ageDesc" class="age-desc">
+        WARNING – This website contains content intended for mature audiences only.
+      </p>
+
+      <p class="age-danger" aria-live="polite">
+        <strong>THIS IS NOT A CHILD FRIENDLY SITE.</strong>
+      </p>
+
+      <p class="age-instruction">Press <strong>Enter</strong> or click to confirm you're over the age of 18.</p>
+
+      <button id="ageContinue" class="age-btn" aria-label="Confirm you are over 18">
+        I am 18+
+      </button>
+
+      <div class="age-hint">Press Enter ↵</div>
+    </div>
+  </div>
+
+
+    <!-- ===== INTRO OVERLAY ===== -->
+    <div id="introOverlay" class="intro-overlay hidden" aria-hidden="true">
+      <video
+        id="introVideo"
+        playsinline
+        preload="auto"
+        disablepictureinpicture
+        controlslist="nodownload noplaybackrate noremoteplayback nofullscreen"
+        oncontextmenu="return false;"
+      >
+        <source src="videos/intro.mp4" type="video/mp4" />
+        Your browser does not support HTML5 video.
+      </video>
+    </div>
+
+    <!-- ===== BACKGROUND THEME ===== -->
+    <audio id="themeAudio" src="videos/theme.mp3" preload="auto" loop></audio>
+
+    <!-- ===== MAP (full-screen panel) ===== -->
+    <div id="mapPanel" class="map-frame">
+      <!-- === MAP LEGEND (bottom-right) === -->
+<div id="mapLegend" class="map-legend">
+  <div class="legend-item">
+    <img src="images/m_premium_circle.png" alt="Premium M" class="legend-icon" />
+    <span>1M+ views</span>
+  </div>
+  <div class="legend-item">
+    <img src="images/m.png" alt="Normal M" class="legend-icon" />
+    <span>&lt;1M views</span>
+
+
+  </div>
+</div>
+
+      <div id="map"></div>
+    </div>
+
+    <!-- ===== SPACER (ensures map bottom isn't visible from About) ===== -->
+
+
+    <!-- ===== ABOUT (full-screen section) ===== -->
+    <section id="about" class="section section--about" aria-label="About Metroman">
+      <h1>Lore</h1>
+  <!-- ===== SLIDER-ONLY TIMELINE (About) ===== -->
+<div class="slider-timeline" id="aboutTimeline" aria-label="Project timeline">
+  
+  <!-- cards (anchored at 0%, 33.3%, 66.6%, 100%) -->
+  <div class="rt-card" id="card-t1" data-for="t1" style="--pos:0%">
+    <h3>Hero Ahead of Time</h3>
+    <p>Metroman, voiced by Brad Pitt, is the hero of Megamind and Megamind 2, and remains one of DreamWorks’ most iconic characters. Released in November 2010, the original film grossed over $361 million worldwide, leaving a lasting mark on Gen Z’s collective childhood. Metroman’s design and heroic flair were far ahead of their time, setting a new standard for animated superheroes in the decade that followed..</p>
+  </div>
+  <div class="rt-card" id="card-t2" data-for="t2" style="--pos:33.3%">
+    <h3>So Bad It's Good</h3>
+    <p>Fourteen years later, Megamind 2 (2024) stumbled into infamy with a 6% Rotten Tomatoes score — the lowest in DreamWorks history — reviving the series not through glory, but through meme culture. The movie was so bad it transcended criticism, becoming an ironic masterpiece of internet humor, where fans celebrated its absurdity more than its plot, transforming it from a cinematic failure into a digital cult phenomenon.</p>
+  </div>
+  <div class="rt-card" id="card-t3" data-for="t3" style="--pos:66.6%">
+    <h3>Flop to Fame - English Virality</h3>
+    <p>What started as a joke became a movement. The Metroman dance, originally just a few seconds in the movie, caught fire in English meme culture. Edits, remixes, and meme compilations flooded YouTube and TikTok, each one exaggerating his divine rhythm and unshakable confidence. Before long, it spiraled into a real-life dancing cult, with fans recreating the moves at parties and conventions. Today, Videos of the Metroman dance universe has racked up over 10 million views and counting, making him not just a meme, but a SuperMeme.
+
+</p>
+  </div>
+  <div class="rt-card" id="card-t4" data-for="t4" style="--pos:100%">
+    <h3>Chinese Adoption</h3>
+    <p>In October, a video of of Metroman's "splitting the bus" voiceover exploded across Chinese social media, spawning a flood of hilarious province (state) themed voiceovers that only the locals truly get. The trend has gone viral nationwide, with countless edits pulling in millions of views and even inspiring full on cosplay recreations. Right now, Metroman is at the peak of his meme power, taking over countries.</p>
+  </div>
+
+  <!-- big slider (the timeline) -->
+<div class="rt-slider" role="group" aria-label="Timeline slider">
+  <div class="rt-range-wrap">
+    <input
+      type="range"
+      id="tlSlider"
+      class="rt-range"
+      min="0" max="3" step="0.01" value="0"
+      aria-valuemin="0" aria-valuemax="3" aria-valuenow="0"
+      aria-valuetext="Nov 2010"
+    />
+    <!-- animated fill inside the track -->
+    <span class="rt-fill" aria-hidden="true"></span>
+  </div>
+
+  <div class="rt-marks">
+    <span>Nov 2010</span>
+    <span>Mar 2024</span>
+    <span>Aug 2025</span>
+    <span>Oct 2025</span>
+  </div>
+</div>
+
+
+
+    </section>
+
+    <!-- ===== PLACEHOLDER SECTIONS (anchors only; content TBD) ===== -->
+ <section id="roadmap" class="section" aria-label="Roadmap">
+  <h1>Roadmap</h1>
+  <!-- Right-side chroma-keyed video -->
+<div class="roadmap-side-video" aria-hidden="true">
+  <canvas id="metroCanvas"></canvas>
+  <video
+    id="metroVideo"
+    src="videos/metro_green.mp4"
+    preload="auto"
+    playsinline
+    muted
+    disablepictureinpicture
+    controlslist="nodownload noplaybackrate noremoteplayback nofullscreen"
+    style="display:none"
+  ></video>
+</div>
+
+
+  <div class="roadmap-grid" id="roadmapGrid">
+    <article class="phase-card" data-phase="1">
+      <p>
+        <span class="phase-label">Phase 1 – Community Building:</span>
+        Every valhalla memecoin starts with its people. This phase is all about igniting curiosity, building 
+        transparency and trust, uniting early believers, and building a strong social presence through memes, and humor.
+        The goal is to bridge Chinese and English meme communities, connecting two worlds through shared laughter,
+        creativity, and the universal language of fun.
+      </p>
+    </article>
+
+    <article class="phase-card" data-phase="2">
+      <p>
+        <span class="phase-label">Phase 2 – Continual Development:</span>
+        With the community thriving, focus shifts to strengthening the foundation. This includes enhancing token utility,
+        upgrading the website, and launching interactive community games with BNB rewards. It’s about evolving beyond the meme,
+        transforming hype into a lasting ecosystem that keeps players, holders, and fans engaged.
+      </p>
+    </article>
+
+    <article class="phase-card" data-phase="3">
+      <p>
+        <span class="phase-label">Phase 3 – Marketing & Expansion:</span>
+        The world needs to hear about Metroman. Marketing efforts amplify, our goal is to cover the whole of the MetroMan Map -
+         from partnerships and viral campaigns to voiceover collaborations and global map projects. The goal is to push Metroman 
+         beyond crypto circles, turning him into a cultural icon that resonates with internet meme culture.
+      </p>
+    </article>
+
+    <article class="phase-card" data-phase="4">
+      <p>
+        <span class="phase-label">Phase 4 – Global Domination:</span>
+        The legend flies interstellar, and is farting BNB. Metroman becomes a worldwide sensation — woven into memes, music, fashion,
+        and digital art across every corner of the web. The community leads the charge, turning Metroman into a
+        symbol of global meme unity — a hero who represents the power of humor to connect the world.
+      </p>
+    </article>
+  </div>
+</section>
+
+
+    <section id="howtobuy" class="section section--contact" aria-label="Contact Us">
+  <h1>Contact Us</h1>
+
+  <a href="https://x.com/chaoren_bsc"
+     target="_blank"
+     rel="noopener noreferrer"
+     class="x-link"
+     aria-label="Go to Metroman on X">
+    <img src="images/x.png" alt="X logo" class="x-logo" />
+  </a>
+    </section>
+
+
+
+    <!-- ===== VIDEO MODAL ===== -->
+    <div id="videoModal" class="modal hidden">
+      <div id="modalBackdrop" class="modal-backdrop"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modalTitle">Playing...</h2>
+          <button id="modalClose" aria-label="Close">×</button>
+        </div>
+        <div class="modal-body">
+          <video id="modalVideo" controls>
+            <source id="modalSource" src="" type="video/mp4" />
+            Your browser does not support HTML5 video.
+          </video>
+        </div>
+        <div id="modalCredit" class="modal-credit">
+          <p id="creditText"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== FLOAT TOGGLE BUTTON ===== -->
+    <button id="floatToggle" class="float-toggle" aria-label="Toggle floating object" title="Toggle floating object">
+      <svg class="icon-on" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="#ffd60a" d="M12 2a1 1 0 0 1 1 1v4.05a6 6 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 9a4 4 0 1 0 .001 8.001A4 4 0 0 0 12 11z"/>
+      </svg>
+      <svg class="icon-off" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="#ffd60a" d="M4.22 3.22a1 1 0 0 1 1.42 0l15.14 15.14a1 1 0 1 1-1.42 1.42l-2.23-2.23A8 8 0 0 1 6.9 6.65L4.22 3.94a1 1 0 0 1 0-1.42zM12 2a1 1 0 0 1 1 1v4.05a6 6 0 0 1 5.58 6.68l-2.08-2.08A4 4 0 0 0 13 9.06V3a1 1 0 1 1 2 0v.06a8 8 0 0 1 4.93 12.26l-1.44-1.44A6 6 0 0 1 8.97 9.1l-1.6-1.6a8 8 0 0 0-1.03 6.26z"/>
+      </svg>
+    </button>
+    <!-- ===== LANGUAGE TOGGLE BUTTON ===== -->
+    <button id="langToggle" class="lang-toggle" aria-label="Switch language">
+      <span id="langIcon" aria-hidden="true">中</span>
+    </button>
+    <button id="themeToggle" class="nav-btn" title="Toggle theme" aria-label="Toggle theme">
+      <span id="themeIcon">🌙</span>
+    </button>
+
+
+
+    <!-- ===== MUSIC TOGGLE BUTTON ===== -->
+    <button id="musicToggle" class="music-toggle" aria-label="Toggle background music" title="Toggle music">
+      <svg class="icon-on" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="#ffd60a" d="M3 10v4h4l5 4V6L7 10H3zm13.5 2a3.5 3.5 0 0 0-3.2-3.48v6.96A3.5 3.5 0 0 0 16.5 12zm0-6a9.5 9.5 0 0 1 0 12 1 1 0 1 1-1.5-1.32 7.5 7.5 0 0 0 0-9.36A1 1 0 0 1 16.5 6z"/>
+      </svg>
+      <svg class="icon-off" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="#ffd60a" d="M3 10v4h4l5 4V6L7 10H3zm12.59 2 2.12 2.12a1 1 0 0 0 1.41-1.41L17 10.59l2.12-2.12a1 1 0 1 0-1.41-1.41L15.59 9.17l-2.12-2.12a1 1 0 0 0-1.41 1.41L14.17 10.6l-2.12 2.12a1 1 0 1 0 1.41 1.41L15.59 12z"/>
+      </svg>
+    </button>
+
+    <!-- ===== LIBS & APP SCRIPT ===== -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+    <script src="script.js"></script>
+
+    <!-- ===== NAVBAR INTERACTIONS (underline, scroll spy, hide on scroll) ===== -->
+    <script>
+      (function navFX() {
+        const nav = document.getElementById('navbar');
+        const linksWrap = document.getElementById('navLinks');
+        const underline = document.getElementById('navUnderline');
+        const links = Array.from(linksWrap.querySelectorAll('a[href^="#"]'));
+
+        function moveUnderlineTo(el) {
+          const r = el.getBoundingClientRect();
+          const wrapR = linksWrap.getBoundingClientRect();
+          const left = r.left - wrapR.left + 6;               // slight padding alignment
+          const width = r.width - 12;
+          underline.style.left = left + 'px';
+          underline.style.width = Math.max(24, width) + 'px';
+          underline.style.opacity = '1';
+        }
+
+        // Mouse hover preview
+        links.forEach(a => {
+          a.addEventListener('mouseenter', () => moveUnderlineTo(a));
+        });
+        linksWrap.addEventListener('mouseleave', () => {
+          const active = links.find(l => l.classList.contains('active')) || links[0];
+          moveUnderlineTo(active);
+        });
+
+        // Scroll spy
+        const sectionIds = links.map(l => l.getAttribute('href').slice(1));
+        const sections = sectionIds
+          .map(id => document.getElementById(id))
+          .filter(Boolean);
+
+        const setActive = (id) => {
+          links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+          const active = links.find(l => l.classList.contains('active')) || links[0];
+          moveUnderlineTo(active);
+        };
+
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              setActive(entry.target.id);
+            }
+          });
+        }, { rootMargin: "-40% 0px -50% 0px", threshold: 0.01 });
+
+        sections.forEach(s => io.observe(s));
+        // Initial underline position (About or first link)
+        window.addEventListener('load', () => {
+          const active = links.find(l => l.classList.contains('active')) || links[0];
+          moveUnderlineTo(active);
+        });
+        window.addEventListener('resize', () => {
+          const active = links.find(l => l.classList.contains('active')) || links[0];
+          moveUnderlineTo(active);
+        });
+
+        // Hide-on-scroll (down hides, up shows)
+        let lastY = window.scrollY;
+        window.addEventListener('scroll', () => {
+          const y = window.scrollY;
+          const down = y > lastY && y > 120;
+          nav.classList.toggle('hide', down);
+          lastY = y;
+        }, { passive: true });
+      })();
+    </script>
+
+    <!-- ===== Music Toggle (uses __THEME_TARGET_VOL from script.js) ===== -->
+    <script>
+      (function initMusicToggle() {
+        const btn = document.getElementById('musicToggle');
+        const theme = document.getElementById('themeAudio');
+        if (!btn || !theme) return;
+
+        const ICON_ON  = btn.querySelector('.icon-on');
+        const ICON_OFF = btn.querySelector('.icon-off');
+
+        const TARGET_VOL = (typeof window.__THEME_TARGET_VOL === 'number') ? window.__THEME_TARGET_VOL : 0.05;
+        const STEP = 0.05, TICK = 80;
+        let fadeTimer = null;
+
+        function clearFade(){ if (fadeTimer) { clearInterval(fadeTimer); fadeTimer = null; } }
+        function isUserMuted(){ return window.__userMuted === true; }
+        function updateIcon(){
+          const muted = isUserMuted();
+          ICON_ON.style.display  = muted ? 'none' : 'block';
+          ICON_OFF.style.display = muted ? 'block' : 'none';
+          btn.setAttribute('aria-pressed', (!muted).toString());
+        }
+        function fadeTo(vol){
+          clearFade();
+          if (vol > 0 && theme.paused) { try { theme.play(); } catch {} }
+          fadeTimer = setInterval(() => {
+            const diff = vol - theme.volume;
+            if (Math.abs(diff) < 0.02) {
+              theme.volume = vol;
+              clearFade();
+              if (vol === 0) theme.pause();
+              theme.dispatchEvent(new Event('volumechange'));
+              return;
+            }
+            theme.volume += Math.sign(diff) * STEP;
+            theme.volume = Math.max(0, Math.min(1, theme.volume));
+            theme.dispatchEvent(new Event('volumechange'));
+          }, TICK);
+        }
+
+        btn.addEventListener('click', () => {
+          if (isUserMuted()) {
+            window.__userMuted = false;
+            fadeTo(TARGET_VOL);
+          } else {
+            window.__userMuted = true;
+            fadeTo(0);
+          }
+          updateIcon();
+        });
+
+        ['play', 'pause', 'volumechange'].forEach(ev => theme.addEventListener(ev, updateIcon));
+        updateIcon();
+      })();
+    </script>
+
+    <!-- ===== Copy CA to clipboard ===== -->
+    <script>
+      (function () {
+        const copyBtn = document.getElementById('copyCA');
+        const caText  = document.getElementById('contractValue');
+        if (!copyBtn || !caText) return;
+
+        copyBtn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(caText.textContent.trim());
+            copyBtn.textContent = '✅';
+            setTimeout(() => (copyBtn.textContent = '📋'), 1200);
+          } catch {
+            alert('Copy failed');
+          }
+        });
+      })();
+    </script>
+  </body>
+  </html>
+
+  <script>
+(function initRoadmapChromaKey() {
+  const section = document.getElementById('roadmap');
+  const video   = document.getElementById('metroVideo');
+  const canvas  = document.getElementById('metroCanvas');
+  if (!section || !video || !canvas) return;
+
+  const ctx = canvas.getContext('2d', { alpha: true, willReadFrequently: true });
+
+  // --- Simple chroma key params (tweak if needed) ---
+  const KEY = {
+    // Target green color in YUV-ish space via thresholds; simple & fast
+    minG: 80,          // how “green” (0-255) before we consider keying
+    diffRG: 30,        // green minus red at least this much
+    diffBG: 30,        // green minus blue at least this much
+    softness: 30       // edge softness (0–80); higher = softer edge
+  };
+
+  let playing = false;
+  let rafId = null;
+  let seenVisible = false;
+
+  function sizeCanvas() {
+    const vw = video.videoWidth  || 1280;
+    const vh = video.videoHeight || 720;
+    // Fit into the container’s CSS size while keeping pixel clarity
+    // Keep canvas internal pixels equal to video’s native res for best edge quality
+    canvas.width  = vw;
+    canvas.height = vh;
+  }
+
+  function drawFrame() {
+    if (!playing) return;
+    const { videoWidth: w, videoHeight: h } = video;
+    if (!w || !h) {
+      rafId = requestAnimationFrame(drawFrame);
+      return;
+    }
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const d = frame.data;
+
+    // Basic RGB chroma key: drop pixels where G dominates R & B by thresholds
+    // Apply softness by mapping near-threshold to partial alpha.
+    for (let i = 0; i < d.length; i += 4) {
+      const r = d[i], g = d[i + 1], b = d[i + 2];
+
+      const greenStrong = g >= KEY.minG && (g - r) >= KEY.diffRG && (g - b) >= KEY.diffBG;
+      if (greenStrong) {
+        // How far beyond threshold are we? Use as alpha falloff (soft edge)
+        const overR = g - r - KEY.diffRG;
+        const overB = g - b - KEY.diffBG;
+        const over  = Math.max(overR, overB);
+        const softness = Math.max(0, Math.min(1, (over) / (KEY.softness || 1)));
+        // more “over” => more transparent
+        d[i + 3] = Math.round((1 - softness) * d[i + 3]);
+        // If still strongly green, make fully transparent
+        if (over >= (KEY.softness || 1)) d[i + 3] = 0;
+      }
+    }
+
+    ctx.putImageData(frame, 0, 0);
+    rafId = requestAnimationFrame(drawFrame);
+  }
+
+  function stopLoop() {
+    playing = false;
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+
+  // Restart & play whenever the Roadmap section becomes visible
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.target !== section) return;
+
+      if (e.isIntersecting) {
+        // "Visit" detected: restart every time it comes into view
+        if (video.readyState >= 2) {
+          try { video.pause(); } catch {}
+          video.currentTime = 0;
+          // Play muted inline (allowed)
+          video.play().catch(() => {});
+        }
+        seenVisible = true;
+      } else {
+        // If user scrolls away mid-play, we can stop the loop to save cycles
+        stopLoop();
+      }
+    });
+  }, { rootMargin: '0px 0px -10% 0px', threshold: 0.25 });
+
+  io.observe(section);
+
+  // Wire video lifecycle
+  video.addEventListener('loadedmetadata', () => {
+    sizeCanvas();
+  });
+
+  video.addEventListener('play', () => {
+    playing = true;
+    drawFrame();
+  });
+
+  video.addEventListener('pause', () => {
+    // Ensure last drawn frame stays visible
+    stopLoop();
+    if (!video.ended) {
+      // draw the current paused frame
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      // run one chroma pass so paused frame stays transparent
+      const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const d = frame.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const r = d[i], g = d[i + 1], b = d[i + 2];
+        const greenStrong = g >= KEY.minG && (g - r) >= KEY.diffRG && (g - b) >= KEY.diffBG;
+        if (greenStrong) d[i + 3] = 0;
+      }
+      ctx.putImageData(frame, 0, 0);
+    }
+  });
+
+ video.addEventListener('ended', () => {
+  // Seek to last frame and hold (pause), with transparency applied
+  try { video.pause(); } catch {}
+  // Some browsers fire 'ended' at exactly duration; ensure we draw one final frame
+  video.currentTime = Math.max(0, video.duration - 0.001);
+  // Force a draw on the next tick
+  setTimeout(() => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const d = frame.data;
+
+    // HARD CUT chroma key: remove every green pixel completely (no halo)
+    for (let i = 0; i < d.length; i += 4) {
+      const r = d[i], g = d[i + 1], b = d[i + 2];
+      if (g > 80 && g > r * 1.3 && g > b * 1.3) {
+        d[i + 3] = 0; // make it fully transparent
+      }
+    }
+
+    ctx.putImageData(frame, 0, 0);
+    stopLoop();
+  }, 30);
+});
+
+
+  // Resize canvas if layout changes (e.g., orientation)
+  window.addEventListener('resize', () => {
+    if (video.videoWidth && video.videoHeight) sizeCanvas();
+  });
+})();
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const slots = [
+    document.getElementById("loreSlot1"),
+    document.getElementById("loreSlot2"),
+    document.getElementById("loreSlot3"),
+  ];
+
+  // Define the mapping for each timeline marker
+  const loreSets = {
+    t1: ["images/lore1_2.jpg", "images/lore1_3.jpg", "images/lore1_4.jpg"],
+    t2: ["images/lore2_1.jpg", "images/lore2_3.jpg", "images/lore2_4.jpg"],
+    t3: ["images/lore3_1.jpg", "images/lore3_2.jpg", "images/lore3_4.jpg"],
+    t4: ["images/lore4_1.jpg", "images/lore4_2.jpg", "images/lore4_3.jpg"],
+  };
+
+  function updateLoreImages(activeId) {
+    const imgs = loreSets[activeId];
+    if (!imgs) return;
+    slots.forEach((slot, i) => {
+      slot.classList.add("fade");
+      setTimeout(() => {
+        slot.src = imgs[i];
+        slot.classList.remove("fade");
+      }, 300);
+    });
+  }
+
+  // Observe which timeline card is in view
+  const cards = document.querySelectorAll("#about .rt-card");
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) updateLoreImages(e.target.dataset.for);
+    });
+  }, { threshold: 0.5 });
+  cards.forEach((c) => io.observe(c));
+
+  // Also trigger on hover for instant previews
+  cards.forEach((c) => {
+    c.addEventListener("mouseenter", () => updateLoreImages(c.dataset.for));
+  });
+});
+</script>
